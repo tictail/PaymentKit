@@ -42,8 +42,7 @@
 - (void)drawRect:(CGRect)rect
 {
     if (self.text.length == 0 || [self.text isEqualToString:kPTKTextFieldSpaceChar]) {
-        CGRect placeholderRect = self.bounds;
-        placeholderRect.origin.y += 0.5;
+        CGRect placeholderRect = [self placeholderRectForBounds:self.bounds];
         [super drawPlaceholderInRect:placeholderRect];
     }
     else
