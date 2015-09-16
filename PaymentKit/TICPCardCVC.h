@@ -1,21 +1,21 @@
 //
-//  PTKCardCVC.h
-//  PTKPayment Example
+//  TICPCardCVC.h
+//  TICPPayment Example
 //
 //  Created by Alex MacCaw on 1/22/13.
 //  Copyright (c) 2013 Stripe. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "PTKCardType.h"
-#import "PTKComponent.h"
+#import "TICPCardType.h"
+#import "TICPComponent.h"
 
-@interface PTKCardCVC : PTKComponent
+@interface TICPCardCVC : TICPComponent
 
 @property (nonatomic, readonly) NSString *string;
 
 + (instancetype)cardCVCWithString:(NSString *)string;
-- (BOOL)isValidWithType:(PTKCardType)type;
-- (BOOL)isPartiallyValidWithType:(PTKCardType)type;
+- (BOOL)isValidWithType:(TICPCardType)type;
+- (BOOL)isPartiallyValidWithType:(TICPCardType)type;
 
 @end

@@ -1,6 +1,6 @@
 //
-//  PTKPaymentField.m
-//  PTKPayment Example
+//  TICPPaymentField.m
+//  TICPPayment Example
 //
 //  Created by Alex MacCaw on 1/22/13.
 //  Copyright (c) 2013 Stripe. All rights reserved.
@@ -11,29 +11,29 @@
 #define RedColor RGB(253,0,17)
 #define DefaultBoldFont [UIFont boldSystemFontOfSize:17]
 
-#define kPTKViewPlaceholderViewAnimationDuration 0.25
+#define kTICPViewPlaceholderViewAnimationDuration 0.25
 
-#define kPTKViewCardExpiryFieldStartX 84 + 200
-#define kPTKViewCardCVCFieldStartX 177 + 200
+#define kTICPViewCardExpiryFieldStartX 84 + 200
+#define kTICPViewCardCVCFieldStartX 177 + 200
 
-#define kPTKViewCardExpiryFieldEndX 84
-#define kPTKViewCardCVCFieldEndX 177
+#define kTICPViewCardExpiryFieldEndX 84
+#define kTICPViewCardCVCFieldEndX 177
 
-static NSString *const kPTKLocalizedStringsTableName = @"PaymentKit";
-static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable";
+static NSString *const kTICPLocalizedStringsTableName = @"PaymentKit";
+static NSString *const kTICPOldLocalizedStringsTableName = @"STPaymentLocalizable";
 
-#import "PTKView.h"
-#import "PTKTextField.h"
+#import "TICPView.h"
+#import "TICPTextField.h"
 
-@interface PTKView () <PTKTextFieldDelegate> {
+@interface TICPView () <TICPTextFieldDelegate> {
 @private
     BOOL _isInitialState;
     BOOL _isValidState;
 }
 
 @property (nonatomic, readonly, assign) UIResponder *firstResponderField;
-@property (nonatomic, readonly, assign) PTKTextField *firstInvalidField;
-@property (nonatomic, readonly, assign) PTKTextField *nextFirstResponder;
+@property (nonatomic, readonly, assign) TICPTextField *firstInvalidField;
+@property (nonatomic, readonly, assign) TICPTextField *nextFirstResponder;
 
 - (void)setup;
 - (void)setupPlaceholderView;
@@ -41,7 +41,7 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 - (void)setupCardExpiryField;
 - (void)setupCardCVCField;
 
-- (void)pkTextFieldDidBackSpaceWhileTextIsEmpty:(PTKTextField *)textField;
+- (void)pkTextFieldDidBackSpaceWhileTextIsEmpty:(TICPTextField *)textField;
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)replacementString;
 - (BOOL)cardNumberFieldShouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)replacementString;
@@ -49,15 +49,15 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 - (BOOL)cardCVCShouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)replacementString;
 
 @property (nonatomic) UIView *opaqueOverGradientView;
-@property (nonatomic) PTKCardNumber *cardNumber;
-@property (nonatomic) PTKCardExpiry *cardExpiry;
-@property (nonatomic) PTKCardCVC *cardCVC;
-@property (nonatomic) PTKAddressZip *addressZip;
+@property (nonatomic) TICPCardNumber *cardNumber;
+@property (nonatomic) TICPCardExpiry *cardExpiry;
+@property (nonatomic) TICPCardCVC *cardCVC;
+@property (nonatomic) TICPAddressZip *addressZip;
 @end
 
 #pragma mark -
 
-@implementation PTKView
+@implementation TICPView
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -128,7 +128,7 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 
 - (void)setupCardNumberField
 {
-    self.cardNumberField = [[PTKTextField alloc] initWithFrame:CGRectMake(12, 0, 170, 20)];
+    self.cardNumberField = [[TICPTextField alloc] initWithFrame:CGRectMake(12, 0, 170, 20)];
     self.cardNumberField.delegate = self;
     self.cardNumberField.placeholder = [self.class localizedStringWithKey:@"placeholder.card_number" defaultValue:@"1234 5678 9012 3456"];
     self.cardNumberField.keyboardType = UIKeyboardTypeNumberPad;
@@ -140,7 +140,7 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 
 - (void)setupCardExpiryField
 {
-    self.cardExpiryField = [[PTKTextField alloc] initWithFrame:CGRectMake(kPTKViewCardExpiryFieldStartX, 0, 60, 20)];
+    self.cardExpiryField = [[TICPTextField alloc] initWithFrame:CGRectMake(kTICPViewCardExpiryFieldStartX, 0, 60, 20)];
     self.cardExpiryField.delegate = self;
     self.cardExpiryField.placeholder = [self.class localizedStringWithKey:@"placeholder.card_expiry" defaultValue:@"MM/YY"];
     self.cardExpiryField.keyboardType = UIKeyboardTypeNumberPad;
@@ -152,7 +152,7 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 
 - (void)setupCardCVCField
 {
-    self.cardCVCField = [[PTKTextField alloc] initWithFrame:CGRectMake(kPTKViewCardCVCFieldStartX, 0, 55, 20)];
+    self.cardCVCField = [[TICPTextField alloc] initWithFrame:CGRectMake(kTICPViewCardCVCFieldStartX, 0, 55, 20)];
     self.cardCVCField.delegate = self;
     self.cardCVCField.placeholder = [self.class localizedStringWithKey:@"placeholder.card_cvc" defaultValue:@"CVC"];
     self.cardCVCField.keyboardType = UIKeyboardTypeNumberPad;
@@ -166,11 +166,11 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 // Leave this in for a long while to preserve compatibility.
 + (NSString *)localizedStringWithKey:(NSString *)key defaultValue:(NSString *)defaultValue
 {
-    NSString *value = NSLocalizedStringFromTable(key, kPTKLocalizedStringsTableName, nil);
+    NSString *value = NSLocalizedStringFromTable(key, kTICPLocalizedStringsTableName, nil);
     if (value && ![value isEqualToString:key]) { // key == no value
         return value;
     } else {
-        value = NSLocalizedStringFromTable(key, kPTKOldLocalizedStringsTableName, nil);
+        value = NSLocalizedStringFromTable(key, kTICPOldLocalizedStringsTableName, nil);
         if (value && ![value isEqualToString:key]) {
             return value;
         }
@@ -181,19 +181,19 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 
 #pragma mark - Accessors
 
-- (PTKCardNumber *)cardNumber
+- (TICPCardNumber *)cardNumber
 {
-    return [PTKCardNumber cardNumberWithString:self.cardNumberField.text];
+    return [TICPCardNumber cardNumberWithString:self.cardNumberField.text];
 }
 
-- (PTKCardExpiry *)cardExpiry
+- (TICPCardExpiry *)cardExpiry
 {
-    return [PTKCardExpiry cardExpiryWithString:self.cardExpiryField.text];
+    return [TICPCardExpiry cardExpiryWithString:self.cardExpiryField.text];
 }
 
-- (PTKCardCVC *)cardCVC
+- (TICPCardCVC *)cardCVC
 {
-    return [PTKCardCVC cardCVCWithString:self.cardCVCField.text];
+    return [TICPCardCVC cardCVCWithString:self.cardCVCField.text];
 }
 
 #pragma mark - State
@@ -213,11 +213,11 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
                               delay:0
                             options:(UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction)
                          animations:^{
-                             self.cardExpiryField.frame = CGRectMake(kPTKViewCardExpiryFieldStartX,
+                             self.cardExpiryField.frame = CGRectMake(kTICPViewCardExpiryFieldStartX,
                                      self.cardExpiryField.frame.origin.y,
                                      self.cardExpiryField.frame.size.width,
                                      self.cardExpiryField.frame.size.height);
-                             self.cardCVCField.frame = CGRectMake(kPTKViewCardCVCFieldStartX,
+                             self.cardCVCField.frame = CGRectMake(kTICPViewCardCVCFieldStartX,
                                      self.cardCVCField.frame.origin.y,
                                      self.cardCVCField.frame.size.width,
                                      self.cardCVCField.frame.size.height);
@@ -266,11 +266,11 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
                      } completion:^(BOOL finished) {
     }];
     [UIView animateWithDuration:0.400 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.cardExpiryField.frame = CGRectMake(kPTKViewCardExpiryFieldEndX,
+        self.cardExpiryField.frame = CGRectMake(kTICPViewCardExpiryFieldEndX,
                 self.cardExpiryField.frame.origin.y,
                 self.cardExpiryField.frame.size.width,
                 self.cardExpiryField.frame.size.height);
-        self.cardCVCField.frame = CGRectMake(kPTKViewCardCVCFieldEndX,
+        self.cardCVCField.frame = CGRectMake(kTICPViewCardCVCFieldEndX,
                 self.cardCVCField.frame.origin.y,
                 self.cardCVCField.frame.size.width,
                 self.cardCVCField.frame.size.height);
@@ -297,9 +297,9 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
             [self.cardCVC isValidWithType:self.cardNumber.cardType];
 }
 
-- (PTKCard *)card
+- (TICPCard *)card
 {
-    PTKCard *card = [[PTKCard alloc] init];
+    TICPCard *card = [[TICPCard alloc] init];
     card.number = [self.cardNumber string];
     card.cvc = [self.cardCVC string];
     card.expMonth = [self.cardExpiry month];
@@ -312,7 +312,7 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 {
     if (![self.placeholderView.image isEqual:image]) {
         __block __unsafe_unretained UIView *previousPlaceholderView = self.placeholderView;
-        [UIView animateWithDuration:kPTKViewPlaceholderViewAnimationDuration delay:0
+        [UIView animateWithDuration:kTICPViewPlaceholderViewAnimationDuration delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              self.placeholderView.layer.opacity = 0.0;
@@ -327,7 +327,7 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
         self.placeholderView.layer.opacity = 0.0;
         self.placeholderView.layer.transform = CATransform3DMakeScale(0.8, 0.8, 0.8);
         [self insertSubview:self.placeholderView belowSubview:previousPlaceholderView];
-        [UIView animateWithDuration:kPTKViewPlaceholderViewAnimationDuration delay:0
+        [UIView animateWithDuration:kTICPViewPlaceholderViewAnimationDuration delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              self.placeholderView.layer.opacity = 1.0;
@@ -339,10 +339,10 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 
 - (void)setPlaceholderToCVC
 {
-    PTKCardNumber *cardNumber = [PTKCardNumber cardNumberWithString:self.cardNumberField.text];
-    PTKCardType cardType = [cardNumber cardType];
+    TICPCardNumber *cardNumber = [TICPCardNumber cardNumberWithString:self.cardNumberField.text];
+    TICPCardType cardType = [cardNumber cardType];
 
-    if (cardType == PTKCardTypeAmex) {
+    if (cardType == TICPCardTypeAmex) {
         [self setPlaceholderViewImage:[UIImage imageNamed:@"cvc-amex"]];
     } else {
         [self setPlaceholderViewImage:[UIImage imageNamed:@"cvc"]];
@@ -351,27 +351,27 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 
 - (void)setPlaceholderToCardType
 {
-    PTKCardNumber *cardNumber = [PTKCardNumber cardNumberWithString:self.cardNumberField.text];
-    PTKCardType cardType = [cardNumber cardType];
+    TICPCardNumber *cardNumber = [TICPCardNumber cardNumberWithString:self.cardNumberField.text];
+    TICPCardType cardType = [cardNumber cardType];
     NSString *cardTypeName = @"placeholder";
 
     switch (cardType) {
-        case PTKCardTypeAmex:
+        case TICPCardTypeAmex:
             cardTypeName = @"amex";
             break;
-        case PTKCardTypeDinersClub:
+        case TICPCardTypeDinersClub:
             cardTypeName = @"diners";
             break;
-        case PTKCardTypeDiscover:
+        case TICPCardTypeDiscover:
             cardTypeName = @"discover";
             break;
-        case PTKCardTypeJCB:
+        case TICPCardTypeJCB:
             cardTypeName = @"jcb";
             break;
-        case PTKCardTypeMasterCard:
+        case TICPCardTypeMasterCard:
             cardTypeName = @"mastercard";
             break;
-        case PTKCardTypeVisa:
+        case TICPCardTypeVisa:
             cardTypeName = @"visa";
             break;
         default:
@@ -413,7 +413,7 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
     return YES;
 }
 
-- (void)pkTextFieldDidBackSpaceWhileTextIsEmpty:(PTKTextField *)textField
+- (void)pkTextFieldDidBackSpaceWhileTextIsEmpty:(TICPTextField *)textField
 {
     if (textField == self.cardCVCField)
         [self.cardExpiryField becomeFirstResponder];
@@ -424,8 +424,8 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 - (BOOL)cardNumberFieldShouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)replacementString
 {
     NSString *resultString = [self.cardNumberField.text stringByReplacingCharactersInRange:range withString:replacementString];
-    resultString = [PTKTextField textByRemovingUselessSpacesFromString:resultString];
-    PTKCardNumber *cardNumber = [PTKCardNumber cardNumberWithString:resultString];
+    resultString = [TICPTextField textByRemovingUselessSpacesFromString:resultString];
+    TICPCardNumber *cardNumber = [TICPCardNumber cardNumberWithString:resultString];
 
     if (![cardNumber isPartiallyValid])
         return NO;
@@ -455,8 +455,8 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 - (BOOL)cardExpiryShouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)replacementString
 {
     NSString *resultString = [self.cardExpiryField.text stringByReplacingCharactersInRange:range withString:replacementString];
-    resultString = [PTKTextField textByRemovingUselessSpacesFromString:resultString];
-    PTKCardExpiry *cardExpiry = [PTKCardExpiry cardExpiryWithString:resultString];
+    resultString = [TICPTextField textByRemovingUselessSpacesFromString:resultString];
+    TICPCardExpiry *cardExpiry = [TICPCardExpiry cardExpiryWithString:resultString];
 
     if (![cardExpiry isPartiallyValid]) return NO;
 
@@ -485,9 +485,9 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 - (BOOL)cardCVCShouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)replacementString
 {
     NSString *resultString = [self.cardCVCField.text stringByReplacingCharactersInRange:range withString:replacementString];
-    resultString = [PTKTextField textByRemovingUselessSpacesFromString:resultString];
-    PTKCardCVC *cardCVC = [PTKCardCVC cardCVCWithString:resultString];
-    PTKCardType cardType = [[PTKCardNumber cardNumberWithString:self.cardNumberField.text] cardType];
+    resultString = [TICPTextField textByRemovingUselessSpacesFromString:resultString];
+    TICPCardCVC *cardCVC = [TICPCardCVC cardCVCWithString:resultString];
+    TICPCardType cardType = [[TICPCardNumber cardNumberWithString:self.cardNumberField.text] cardType];
 
     // Restrict length
     if (![cardCVC isPartiallyValidWithType:cardType]) return NO;
@@ -556,19 +556,19 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
     return nil;
 }
 
-- (PTKTextField *)firstInvalidField;
+- (TICPTextField *)firstInvalidField;
 {
-    if (![[PTKCardNumber cardNumberWithString:self.cardNumberField.text] isValid])
+    if (![[TICPCardNumber cardNumberWithString:self.cardNumberField.text] isValid])
         return self.cardNumberField;
-    else if (![[PTKCardExpiry cardExpiryWithString:self.cardExpiryField.text] isValid])
+    else if (![[TICPCardExpiry cardExpiryWithString:self.cardExpiryField.text] isValid])
         return self.cardExpiryField;
-    else if (![[PTKCardCVC cardCVCWithString:self.cardCVCField.text] isValid])
+    else if (![[TICPCardCVC cardCVCWithString:self.cardCVCField.text] isValid])
         return self.cardCVCField;
 
     return nil;
 }
 
-- (PTKTextField *)nextFirstResponder;
+- (TICPTextField *)nextFirstResponder;
 {
     if (self.firstInvalidField)
         return self.firstInvalidField;
@@ -599,7 +599,7 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 - (BOOL)resignFirstResponder;
 {
     [super resignFirstResponder];
-    
+
     return [self.firstResponderField resignFirstResponder];
 }
 

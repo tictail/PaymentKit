@@ -1,14 +1,14 @@
 //
 //  CardNumber.m
-//  PTKPayment Example
+//  TICPPayment Example
 //
 //  Created by Alex MacCaw on 1/22/13.
 //  Copyright (c) 2013 Stripe. All rights reserved.
 //
 
-#import "PTKCardNumber.h"
+#import "TICPCardNumber.h"
 
-@implementation PTKCardNumber {
+@implementation TICPCardNumber {
 @private
     NSString *_number;
 }
@@ -30,47 +30,47 @@
     return self;
 }
 
-- (PTKCardType)cardType
+- (TICPCardType)cardType
 {
     if (_number.length < 2) {
-        return PTKCardTypeUnknown;
+        return TICPCardTypeUnknown;
     }
 
     NSString *firstChars = [_number substringWithRange:NSMakeRange(0, 2)];
     NSInteger range = [firstChars integerValue];
-    
+
     if (range >= 40 && range <= 49) {
-        return PTKCardTypeVisa;
+        return TICPCardTypeVisa;
     } else if (range >= 50 && range <= 59) {
-        return PTKCardTypeMasterCard;
+        return TICPCardTypeMasterCard;
     } else if (range == 34 || range == 37) {
-        return PTKCardTypeAmex;
+        return TICPCardTypeAmex;
     } else if ([_number hasPrefix:@"6011"] || [_number hasPrefix:@"65"]) {
-        return PTKCardTypeDiscover;
+        return TICPCardTypeDiscover;
     } else if ([_number hasPrefix:@"622"]) {
         // If 622126-622925 its Discover
         NSString *sixChars = [_number substringWithRange:NSMakeRange(0, 6)];
         NSInteger sixCharsInt = [sixChars integerValue];
         if ((sixCharsInt >= 622126) && (sixCharsInt <= 622925)) {
-            return PTKCardTypeDiscover;
+            return TICPCardTypeDiscover;
         }
-        
-        return PTKCardTypeUnknown;
-        
+
+        return TICPCardTypeUnknown;
+
     } else if (range == 64) {
         // If 644-649 its Discover
         NSInteger discoverCheckInt = [[_number substringWithRange:NSMakeRange(0, 3)] integerValue];
         if ((discoverCheckInt >= 644) && (discoverCheckInt <= 649)) {
-            return PTKCardTypeDiscover;
+            return TICPCardTypeDiscover;
         }
-        return PTKCardTypeUnknown;
-        
+        return TICPCardTypeUnknown;
+
     } else if (range == 35) {
-        return PTKCardTypeJCB;
+        return TICPCardTypeJCB;
     } else if (range == 30 || range == 36 || range == 38 || range == 39) {
-        return PTKCardTypeDinersClub;
+        return TICPCardTypeDinersClub;
     } else {
-        return PTKCardTypeUnknown;
+        return TICPCardTypeUnknown;
     }
 }
 
@@ -85,7 +85,7 @@
 
 - (NSString *)lastGroup
 {
-    if (self.cardType == PTKCardTypeAmex) {
+    if (self.cardType == TICPCardTypeAmex) {
         if (_number.length >= 5) {
             return [_number substringFromIndex:([_number length] - 5)];
         }
@@ -108,7 +108,7 @@
 {
     NSRegularExpression *regex;
 
-    if (self.cardType == PTKCardTypeAmex) {
+    if (self.cardType == TICPCardTypeAmex) {
         regex = [NSRegularExpression regularExpressionWithPattern:@"(\\d{1,4})(\\d{1,6})?(\\d{1,5})?" options:0 error:NULL];
     } else {
         regex = [NSRegularExpression regularExpressionWithPattern:@"(\\d{1,4})" options:0 error:NULL];
@@ -141,7 +141,7 @@
         return string;
     }
 
-    if (self.cardType == PTKCardTypeAmex) {
+    if (self.cardType == TICPCardTypeAmex) {
         regex = [NSRegularExpression regularExpressionWithPattern:@"^(\\d{4}|\\d{4}\\s\\d{6})$" options:0 error:NULL];
     } else {
         regex = [NSRegularExpression regularExpressionWithPattern:@"(?:^|\\s)(\\d{4})$" options:0 error:NULL];
@@ -194,11 +194,11 @@
 
 - (NSInteger)lengthForCardType
 {
-    PTKCardType type = self.cardType;
+    TICPCardType type = self.cardType;
     NSInteger length;
-    if (type == PTKCardTypeAmex) {
+    if (type == TICPCardTypeAmex) {
         length = 15;
-    } else if (type == PTKCardTypeDinersClub) {
+    } else if (type == TICPCardTypeDinersClub) {
         length = 14;
     } else {
         length = 16;

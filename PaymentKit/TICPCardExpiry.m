@@ -1,14 +1,14 @@
 //
-//  PTKCardExpiry.m
-//  PTKPayment Example
+//  TICPCardExpiry.m
+//  TICPPayment Example
 //
 //  Created by Alex MacCaw on 1/22/13.
 //  Copyright (c) 2013 Stripe. All rights reserved.
 //
 
-#import "PTKCardExpiry.h"
+#import "TICPCardExpiry.h"
 
-@implementation PTKCardExpiry {
+@implementation TICPCardExpiry {
 @private
     NSString *_month;
     NSString *_year;

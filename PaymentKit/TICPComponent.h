@@ -1,5 +1,5 @@
 //
-//  PTKComponent.h
+//  TICPComponent.h
 //  Stripe
 //
 //  Created by Phil Cohen on 12/18/13.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 // Abstract class; represents a component of a credit card.
-@interface PTKComponent : NSObject
+@interface TICPComponent : NSObject
 
 - (id)initWithString:(NSString *)string;
 - (NSString *)string;

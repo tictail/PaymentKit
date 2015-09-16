@@ -11,5 +11,5 @@ Pod::Spec.new do |s|
   s.resources             = 'PaymentKit/Resources/Cards/*.png', 'PaymentKit/Resources/*.png'
   s.platform              = :ios
   s.requires_arc          = true
-  s.ios.deployment_target = '5.0'
+  s.ios.deployment_target = '8.0'
 end

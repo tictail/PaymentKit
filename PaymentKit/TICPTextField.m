@@ -1,29 +1,29 @@
 //
-//  PTKTextField.m
+//  TICPTextField.m
 //  PaymentKit Example
 //
 //  Created by Michaël Villar on 3/20/13.
 //  Copyright (c) 2013 Stripe. All rights reserved.
 //
 
-#import "PTKTextField.h"
+#import "TICPTextField.h"
 
-#define kPTKTextFieldSpaceChar @"\u200B"
+#define kTICPTextFieldSpaceChar @"\u200B"
 
-@implementation PTKTextField
+@implementation TICPTextField
 
 @dynamic delegate;
 
 + (NSString *)textByRemovingUselessSpacesFromString:(NSString *)string
 {
-    return [string stringByReplacingOccurrencesOfString:kPTKTextFieldSpaceChar withString:@""];
+    return [string stringByReplacingOccurrencesOfString:kTICPTextFieldSpaceChar withString:@""];
 }
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.text = kPTKTextFieldSpaceChar;
+        self.text = kTICPTextFieldSpaceChar;
         [self addObserver:self forKeyPath:@"text" options:0 context:NULL];
     }
     return self;
@@ -41,7 +41,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    if (self.text.length == 0 || [self.text isEqualToString:kPTKTextFieldSpaceChar]) {
+    if (self.text.length == 0 || [self.text isEqualToString:kTICPTextFieldSpaceChar]) {
         CGRect placeholderRect = [self placeholderRectForBounds:self.bounds];
         [super drawPlaceholderInRect:placeholderRect];
     }
@@ -57,7 +57,7 @@
             if ([self.delegate respondsToSelector:@selector(pkTextFieldDidBackSpaceWhileTextIsEmpty:)])
                 [self.delegate performSelector:@selector(pkTextFieldDidBackSpaceWhileTextIsEmpty:)
                                     withObject:self];
-            self.text = kPTKTextFieldSpaceChar;
+            self.text = kTICPTextFieldSpaceChar;
         }
         [self setNeedsDisplay];
     }
